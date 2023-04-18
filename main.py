@@ -29,6 +29,7 @@ class ScreenPoints():
         self.z = lm_z
         
 
+
 while True:
     
     succes, img = cap.read()
