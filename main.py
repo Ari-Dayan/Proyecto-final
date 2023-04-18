@@ -1,7 +1,7 @@
 import mediapipe as mp
 import cv2
 from PIL import Image
-import imutils
+
 
 cap = cv2.VideoCapture(0)
 
@@ -109,11 +109,13 @@ with mpHands.Hands(min_detection_confidence = 0.8, min_tracking_confidence = 0.4
 
         if Low_y<=0 :
             Low_y = 1
-        recorte = imAux[Low_y:Top_y, Low_x:Top_x]
+        
    
-        sized_img = imutils.resize(recorte, width=200, height=300)
+
 
         if results.multi_hand_landmarks:
+            recorte = imAux[Low_y - 20:Top_y + 20, Low_x - 20:Top_x + 20]
+            sized_img = cv2.resize(recorte, (130,200))
             strFotos = str(numFotos)
             numFotos = numFotos +1
             #cv2.imwrite(strFotos, recorte)
