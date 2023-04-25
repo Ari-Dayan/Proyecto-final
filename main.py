@@ -38,8 +38,9 @@ class ScreenPoints():
         self.x = int(lm_x * WIDTH)
         self.y = int(lm_y * HEIGHT)
         self.z = lm_z
-      
-with mpHands.Hands(min_detection_confidence = 0.8, min_tracking_confidence = 0.4) as hands:
+        print(self.x)
+#para definir los parametros de la deteccion, que tan seguro esta la ia de que es una mano     
+with mpHands.Hands(min_detection_confidence = 0.9, min_tracking_confidence = 0.6) as hands:
 
     while True:
 
@@ -77,7 +78,7 @@ with mpHands.Hands(min_detection_confidence = 0.8, min_tracking_confidence = 0.4
                 
                     if hand_points[id].y < Low_y:
                         Low_y = hand_points[id].y
-                    #cv2.circle(img,(hand_x[id], hand_y[id]), 10, (134,82,43), cv2.FILLED)
+
 #____________________________________________________________________________________________________________________________________________________________________________________________________
     
 
@@ -94,7 +95,6 @@ with mpHands.Hands(min_detection_confidence = 0.8, min_tracking_confidence = 0.4
         #recorto el rectangulo
         imAux = img.copy()
 
-       # recorte = imAux.crop(Top_x, Top_y, Low_x, Low_y)
     
         img = cv2.flip(img, 1)
         if Top_x<=0 :
@@ -110,15 +110,25 @@ with mpHands.Hands(min_detection_confidence = 0.8, min_tracking_confidence = 0.4
         if Low_y<=0 :
             Low_y = 1
         
-   
+        
 
 
-        if results.multi_hand_landmarks:
+        if results.multi_hand_landmarks: 
+
+
             recorte = imAux[Low_y - 20:Top_y + 20, Low_x - 20:Top_x + 20]
-            sized_img = cv2.resize(recorte, (130,200))
-            strFotos = str(numFotos)
-            numFotos = numFotos +1
-            #cv2.imwrite(strFotos, recorte)
+                
+            # estan desordenados, pero es para saber si alguno vale 0
+            recWIDTH, recHEIGHT, recCHANNEL  = recorte.shape
+            # esto souluciona para cuando la mano se va un poco de  la pantalla no se frene el codigo
+            if recCHANNEL != 0 and recHEIGHT !=0 and recWIDTH !=0:
+                sized_img = cv2.resize(recorte, (80,120))
+                strFotos = str(numFotos)
+                numFotos = numFotos +1
+                #cv2.imwrite(strFotos, recorte)
+        
+
+
             
 
         #reseteamos las variables
