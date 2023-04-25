@@ -1,7 +1,7 @@
 import mediapipe as mp
 import cv2
 from PIL import Image
-
+import keyboard
 
 cap = cv2.VideoCapture(0)
 
@@ -38,7 +38,7 @@ class ScreenPoints():
         self.x = int(lm_x * WIDTH)
         self.y = int(lm_y * HEIGHT)
         self.z = lm_z
-        print(self.x)
+
 #para definir los parametros de la deteccion, que tan seguro esta la ia de que es una mano     
 with mpHands.Hands(min_detection_confidence = 0.9, min_tracking_confidence = 0.6) as hands:
 
@@ -122,11 +122,15 @@ with mpHands.Hands(min_detection_confidence = 0.9, min_tracking_confidence = 0.6
             recWIDTH, recHEIGHT, recCHANNEL  = recorte.shape
             # esto souluciona para cuando la mano se va un poco de  la pantalla no se frene el codigo
             if recCHANNEL != 0 and recHEIGHT !=0 and recWIDTH !=0:
-                sized_img = cv2.resize(recorte, (80,120))
+                sized_img = cv2.resize(recorte, (40,75))
                 strFotos = str(numFotos)
-                numFotos = numFotos +1
-                #cv2.imwrite(strFotos, recorte)
-        
+                
+
+                if keyboard.is_pressed('ctrl'):
+                    # es para sacar un foto y guardarlo en la carpeta P de positivos
+                    cv2.imwrite("N" + "/imagen_{}.jpg".format(numFotos), sized_img)
+                    numFotos = numFotos +1
+                    print("foto sacada")
 
 
             
